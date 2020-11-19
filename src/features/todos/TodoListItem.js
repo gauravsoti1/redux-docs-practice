@@ -1,37 +1,41 @@
-import React from "react";
+import React from 'react'
 
-import { ReactComponent as TimesSolid } from "./times-solid.svg";
+import { ReactComponent as TimesSolid } from './times-solid.svg'
 
-import { availableColors, capitalize } from "../filters/colors";
-import { useDispatch, useSelector } from "react-redux";
+import { availableColors, capitalize } from '../filters/colors'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectTodos } from './todosSlice'
 
 const TodoListItem = ({ id, onCompletedChange, onDelete }) => {
   const todo = useSelector(
-    (state) => state.todos.filter((todo) => todo.id === id)[0]
-  );
-  const dispatch = useDispatch();
+    (state) => selectTodos(state).filter((todo) => todo.id === id)[0]
+  )
+  const dispatch = useDispatch()
 
-  const { text, completed, color } = todo;
+  const { text, completed, color } = todo
   const handleCompletedChanged = (e) => {
-    onCompletedChange(e.target.checked);
-  };
+    dispatch({
+      type: 'todos/todoToggled',
+      payload: id,
+    })
+  }
 
   const onColorChange = (newColor) => {
     dispatch({
-      type: "todos/colorSelected",
-      payload: { color: newColor, todoId: id }
-    });
-  };
+      type: 'todos/colorSelected',
+      payload: { color: newColor, todoId: id },
+    })
+  }
 
   const handleColorChanged = (e) => {
-    onColorChange(e.target.value);
-  };
+    onColorChange(e.target.value)
+  }
 
   const colorOptions = availableColors.map((c) => (
     <option key={c} value={c}>
       {capitalize(c)}
     </option>
-  ));
+  ))
 
   return (
     <li>
@@ -61,7 +65,7 @@ const TodoListItem = ({ id, onCompletedChange, onDelete }) => {
         </div>
       </div>
     </li>
-  );
-};
+  )
+}
 
-export default TodoListItem;
+export default TodoListItem
